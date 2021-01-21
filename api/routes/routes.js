@@ -3,5 +3,5 @@
 module.exports = function (app) {
   var controller = require("../controllers/controller");
 
-  app.route("/tags").get(controller.getData);
+  app.route("/api/tags").get(controller.getData);
 };
