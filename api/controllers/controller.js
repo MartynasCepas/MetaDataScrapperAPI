@@ -1,6 +1,8 @@
 "use strict";
 
+const { htmlToText } = require("html-to-text");
 const urlMetadata = require("url-metadata");
+const getUrls = require("get-urls");
 
 var o = {}; // empty Object
 var key1 = "title";
@@ -12,7 +14,12 @@ o[key2] = "";
 o[key3] = "";
 
 exports.getData = function (req, res) {
-  urlMetadata(req.headers.requestedurl).then(
+  var urls = getUrls(req.headers.requestedurl);
+  var it = urls.values();
+  var first = it.next();
+  var url = first.value;
+
+  urlMetadata(url).then(
     function (metadata) {
       // success handler
       o[key1] = metadata["og:title"];
@@ -28,3 +35,10 @@ exports.getData = function (req, res) {
 };
 
 // we need og:image, og:title, og:description
+
+exports.getTextFromHtml = function (req, res) {
+  console.log(req.body.content_html);
+  const text = htmlToText(req.body.content_html);
+  console.log(text);
+  res.send("working");
+};
